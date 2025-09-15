@@ -1,0 +1,67 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './PassengerRoute.css';
+
+const PassengerRoute = () => {
+  const navigate = useNavigate();
+  const [routeData, setRouteData] = useState({
+    startingPoint: '',
+    destination: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRouteData({
+      ...routeData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Store route info in localStorage
+    localStorage.setItem('passengerRoute', JSON.stringify(routeData));
+    navigate('/passenger/buses');
+  };
+
+  return (
+    <div className="passenger-route-container">
+      <h1>Find Your Bus</h1>
+      <div className="route-form-container">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="startingPoint">From:</label>
+            <input
+              type="text"
+              id="startingPoint"
+              name="startingPoint"
+              value={routeData.startingPoint}
+              onChange={handleChange}
+              required
+              placeholder="Enter your starting location"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="destination">To:</label>
+            <input
+              type="text"
+              id="destination"
+              name="destination"
+              value={routeData.destination}
+              onChange={handleChange}
+              required
+              placeholder="Enter your destination"
+            />
+          </div>
+          
+          <button type="submit" className="search-button">
+            Find Buses
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default PassengerRoute;

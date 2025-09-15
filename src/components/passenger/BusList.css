@@ -1,0 +1,115 @@
+.bus-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.route-info-panel {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.route-info-panel h1 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.route-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.route-details p {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.bus-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 1rem 0;
+}
+
+.bus-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bus-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.bus-item.selected {
+  background-color: rgba(46, 204, 113, 0.3);
+  border-left: 4px solid #2ecc71;
+}
+
+.bus-details h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.bus-details p {
+  margin: 0.25rem 0;
+}
+
+.arrival-time {
+  color: #2ecc71;
+  font-size: 1.1rem;
+}
+
+.no-buses {
+  text-align: center;
+  padding: 2rem 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.back-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .bus-list-container {
+    flex-direction: row;
+  }
+  
+  .route-info-panel {
+    width: 350px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .map-container {
+    flex: 1;
+  }
+}
