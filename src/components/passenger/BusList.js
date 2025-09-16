@@ -40,16 +40,20 @@ const BusList = () => {
   const [passengerPosition, setPassengerPosition] = useState(null);
   const [routePath, setRoutePath] = useState([]);
 
+  // Set passengerRoute only once on mount
   useEffect(() => {
-    // Get passenger route from localStorage
     const storedRoute = localStorage.getItem('passengerRoute');
     if (!storedRoute) {
       navigate('/passenger');
       return;
     }
-    
     setPassengerRoute(JSON.parse(storedRoute));
-    
+  }, [navigate]);
+
+  // Main logic: runs when passengerRoute changes
+  useEffect(() => {
+    if (!passengerRoute) return;
+
     // Get passenger's current position
     getCurrentPosition()
       .then(position => {
@@ -58,7 +62,7 @@ const BusList = () => {
       .catch(err => {
         console.error('Error getting passenger position:', err);
       });
-    
+
     // Fetch buses from Firebase
     const busesRef = ref(db, 'buses');
     const unsubscribe = onValue(busesRef, (snapshot) => {
@@ -95,7 +99,7 @@ const BusList = () => {
       }
     });
     return () => unsubscribe();
-  }, [navigate, passengerRoute, passengerPosition]);
+  }, [passengerRoute, passengerPosition]);
 
   const handleBusSelect = (bus) => {
     setSelectedBus(bus);
@@ -110,9 +114,6 @@ const BusList = () => {
   if (!passengerRoute) {
     return (
       <div className="loading-container">
-        <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
-          Transit Tracker
-        </div>
         <h2 style={{ marginTop: 80 }}>Loading...</h2>
       </div>
     );
@@ -120,10 +121,7 @@ const BusList = () => {
 
   return (
     <div className="bus-list-container">
-      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
-        Transit Tracker
-      </div>
-      <div className="route-info-panel" style={{ marginTop: 80 }}>
+      <div className="route-info-panel">
         <h1>Available Buses</h1>
         <div className="route-details">
           <p><strong>From:</strong> {passengerRoute.startingPoint}</p>
