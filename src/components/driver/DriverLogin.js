@@ -29,7 +29,10 @@ const DriverLogin = () => {
 
   return (
     <div className="driver-login-container">
-      <h1>Driver Login</h1>
+      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '2px', zIndex: 100 }}>
+        Transit Tracker
+      </div>
+      <h1 style={{ marginTop: 80 }}>Driver Login</h1>
       <div className="driver-form-container">
         <form onSubmit={handleSubmit}>
           <div className="form-group">

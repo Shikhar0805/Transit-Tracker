@@ -6,6 +6,7 @@
   min-height: 100vh;
   background-color: #f5f5f5;
   padding: 1rem;
+  background-image: url(https://w0.peakpx.com/wallpaper/773/508/HD-wallpaper-world-map-time-zone-creative.jpg );
 }
 
 .passenger-route-container h1 {
@@ -14,12 +15,13 @@
 }
 
 .route-form-container {
-  background-color: white;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 500px;
+  backdrop-filter: blur(10px);
+  border: white 1px solid;
 }
 
 .form-group {
@@ -30,7 +32,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  color: #34495e;
+  color: white;
 }
 
 .form-group input {
@@ -42,9 +44,9 @@
 }
 
 .search-button {
-  background-color: #2ecc71;
+  background-color: black;
   color: white;
-  border: none;
+  border: 1px solid white;
   padding: 1rem;
   font-size: 1.1rem;
   border-radius: 5px;

@@ -110,14 +110,20 @@ const BusList = () => {
   if (!passengerRoute) {
     return (
       <div className="loading-container">
-        <h2>Loading...</h2>
+        <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
+          Transit Tracker
+        </div>
+        <h2 style={{ marginTop: 80 }}>Loading...</h2>
       </div>
     );
   }
 
   return (
     <div className="bus-list-container">
-      <div className="route-info-panel">
+      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
+        Transit Tracker
+      </div>
+      <div className="route-info-panel" style={{ marginTop: 80 }}>
         <h1>Available Buses</h1>
         <div className="route-details">
           <p><strong>From:</strong> {passengerRoute.startingPoint}</p>

@@ -15,9 +15,12 @@ const LandingPage = () => {
 
   return (
     <div className="landing-container">
-      <h1>Bus Tracking System</h1>
+      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '2px', zIndex: 100 }}>
+        Transit Tracker
+      </div>
+      <h1 style={{ marginTop: 80 }}>Bus Tracking System</h1>
       <div className="user-selection">
-        <h2>I am a:</h2>
+        <h2>Choose your role:</h2>
         <div className="button-container">
           <button 
             className="user-type-button driver-button"

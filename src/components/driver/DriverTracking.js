@@ -128,7 +128,10 @@ const DriverTracking = () => {
 
   return (
     <div className="driver-tracking-container">
-      <div className="driver-info-panel">
+      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
+        Transit Tracker
+      </div>
+      <div className="driver-info-panel" style={{ marginTop: 80 }}>
         <h1>Driver Tracking</h1>
         <div className="driver-details">
           <p><strong>Vehicle:</strong> {driverInfo.vehicleName}</p>
