@@ -26,7 +26,7 @@ const PassengerRoute = () => {
 
   return (
     <div className="passenger-route-container">
-      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '2px', zIndex: 100 }}>
+      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
         Transit Tracker
       </div>
       <h1 style={{ marginTop: 80,  color:'white'}}>Find Your Bus</h1>

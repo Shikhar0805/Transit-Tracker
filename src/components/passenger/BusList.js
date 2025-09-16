@@ -141,8 +141,6 @@ const BusList = () => {
                 <div className="bus-details">
                   <h3>{bus.name}</h3>
                   <p><strong>Route:</strong> {bus.route}</p>
-                  <p><strong>From:</strong> {bus.from}</p>
-                  <p><strong>To:</strong> {bus.to}</p>
                   <p className="arrival-time">
                     <strong>Estimated Arrival:</strong> {bus.estimatedArrival}
                   </p>
