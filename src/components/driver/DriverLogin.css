@@ -60,3 +60,6 @@
 .submit-button:hover {
   background-color: #2980b9;
 }
+#startingPoint, #destination{
+  color: black;
+}

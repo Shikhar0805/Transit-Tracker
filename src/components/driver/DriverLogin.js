@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { cityStops } from '../../data/cityStops';
 import { useNavigate } from 'react-router-dom';
 import './DriverLogin.css';
 
@@ -6,6 +7,7 @@ const DriverLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     vehicleName: '',
+    city: '',
     startingPoint: '',
     destination: '',
     route: ''
@@ -17,6 +19,10 @@ const DriverLogin = () => {
       ...formData,
       [name]: value
     });
+    // Reset stops if city changes
+    if (name === 'city') {
+      setFormData({ ...formData, city: value, startingPoint: '', destination: '' });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -46,31 +52,55 @@ const DriverLogin = () => {
               required
             />
           </div>
-          
           <div className="form-group">
-            <label htmlFor="startingPoint">Starting Point:</label>
-            <input
-              type="text"
-              id="startingPoint"
-              name="startingPoint"
-              value={formData.startingPoint}
+            <label htmlFor="city">City:</label>
+            <select
+              id="city"
+              name="city"
+              value={formData.city}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select City</option>
+              {Object.keys(cityStops).map(city => (
+                <option key={city} value={city}>{city.charAt(0).toUpperCase() + city.slice(1)}</option>
+              ))}
+            </select>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="destination">Destination:</label>
-            <input
-              type="text"
-              id="destination"
-              name="destination"
-              value={formData.destination}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
+          {formData.city && (
+            <>
+              <div className="form-group">
+                <label htmlFor="startingPoint">Starting Point:</label>
+                <select
+                  id="startingPoint"
+                  name="startingPoint"
+                  value={formData.startingPoint}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Source Stop</option>
+                  {cityStops[formData.city].map(stop => (
+                    <option key={stop} value={stop}>{stop}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="destination">Destination:</label>
+                <select
+                  id="destination"
+                  name="destination"
+                  value={formData.destination}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Destination Stop</option>
+                  {cityStops[formData.city].map(stop => (
+                    <option key={stop} value={stop}>{stop}</option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
           <div className="form-group">
             <label htmlFor="route">Route:</label>
             <input
@@ -83,7 +113,6 @@ const DriverLogin = () => {
               placeholder="e.g. Route 42"
             />
           </div>
-          
           <button type="submit" className="submit-button">
             Start Sharing Location
           </button>
