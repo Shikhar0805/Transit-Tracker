@@ -6,7 +6,9 @@
   height: 100vh;
   background-color: #f5f5f5;
   text-align: center;
-  background-image: url(https://w0.peakpx.com/wallpaper/773/508/HD-wallpaper-world-map-time-zone-creative.jpg );
+  background-image: url("../../../Images/Background.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .landing-container h1 {
@@ -32,8 +34,8 @@
 
 .button-container {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
   gap: 1rem;
 }
 
@@ -44,7 +46,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 45%;
+  width: 100%;
   min-width: 150px;
 }
 
@@ -66,6 +68,16 @@
 
 .passenger-button:hover {
   background-color: #27ae60;
+}
+
+.admin-button {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+.admin-button:hover {
+  background-color: #764ba2;
 }
 
 @media (max-width: 600px) {

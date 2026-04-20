@@ -8,16 +8,26 @@ export const getCurrentPosition = () => {
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          resolve({
+          const coords = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
             accuracy: position.coords.accuracy
-          });
+          };
+          console.log('✅ Current position retrieved:', coords);
+          resolve(coords);
         },
         (err) => {
-          reject(err);
+          console.error('❌ Geolocation error:', err.message);
+          // Fallback to default location for development (Bangalore)
+          const fallbackCoords = { lat: 13.0827, lng: 77.6055, accuracy: 0 };
+          console.log('📍 Using fallback location:', fallbackCoords);
+          resolve(fallbackCoords);
         },
-        { enableHighAccuracy: true }
+        { 
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
       );
     }
   });

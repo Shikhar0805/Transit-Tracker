@@ -23,6 +23,12 @@ const LandingPage = () => {
         <h2>Choose your role:</h2>
         <div className="button-container">
           <button 
+            className="user-type-button admin-button"
+            onClick={() => navigate('/admin/login')}
+          >
+            Admin
+          </button>
+          <button 
             className="user-type-button driver-button"
             onClick={() => handleUserTypeSelection('driver')}
           >

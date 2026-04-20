@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { cityStops, cityRoutes } from '../../data/cityStops';
+import React, { useState, useEffect } from 'react';
+import { cityStops, getRoutesByCity } from '../../data/cityStops';
 import { useNavigate } from 'react-router-dom';
 import { initializeSampleDrivers, authenticateDriver } from '../../services/DriverService';
+import { db } from '../../firebase';
+import { ref, onValue } from 'firebase/database';
 import './DriverLogin.css';
 
 const DriverLogin = () => {
@@ -12,14 +14,13 @@ const DriverLogin = () => {
   });
   const [routeData, setRouteData] = useState({
     city: '',
-    startingPoint: '',
-    destination: '',
-    route: ''
+    routeId: ''
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [driverInfo, setDriverInfo] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [routes, setRoutes] = useState([]);
 
   const handleCredentialChange = (e) => {
     const { name, value } = e.target;
@@ -36,9 +37,49 @@ const DriverLogin = () => {
       ...routeData,
       [name]: value
     });
-    // Reset stops and route if city changes
+    // Reset route if city changes
     if (name === 'city') {
-      setRouteData({ ...routeData, city: value, startingPoint: '', destination: '', route: '' });
+      setRouteData({ ...routeData, city: value, routeId: '' });
+      // Note: loadRoutesFromFirebase is now called in useEffect on city change
+    }
+  };
+
+  // Cleanup Firebase listener when city changes in routeData
+  useEffect(() => {
+    if (!routeData.city) return;
+    
+    const unsubscribe = loadRoutesFromFirebase(routeData.city);
+    
+    // Cleanup: unsubscribe from Firebase listener when city changes or component unmounts
+    return () => {
+      if (unsubscribe) {
+        console.log('🧹 DriverLogin: Cleaned up Firebase listener');
+        unsubscribe();
+      }
+    };
+  }, [routeData.city]);
+
+  const loadRoutesFromFirebase = (city) => {
+    try {
+      const routesRef = ref(db, `routes/${city}`);
+      const unsubscribe = onValue(routesRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const routesData = snapshot.val();
+          // Convert object to array and sort by routeId
+          const routesArray = Object.values(routesData).sort((a, b) => String(a.routeId).localeCompare(String(b.routeId)));
+          setRoutes(routesArray);
+        } else {
+          // No routes in Firebase, use static data as fallback
+          const staticRoutes = getRoutesByCity(city);
+          setRoutes(staticRoutes);
+        }
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error('Error loading routes:', error);
+      // Fallback to static data
+      const staticRoutes = getRoutesByCity(city);
+      setRoutes(staticRoutes);
     }
   };
 
@@ -68,11 +109,18 @@ const DriverLogin = () => {
   const handleRouteSubmit = (e) => {
     e.preventDefault();
     
+    // Find the selected route object
+    const selectedRoute = routes.find(route => String(route.routeId) === String(routeData.routeId));
+    
     // Combine driver info with route data
     const completeDriverInfo = {
       ...driverInfo,
-      ...routeData,
-      vehicleName: driverInfo.vehicleNumber, // Use vehicleNumber as vehicleName for compatibility
+      city: routeData.city,
+      routeId: routeData.routeId,
+      route: selectedRoute?.routeName || '',
+      startingPoint: selectedRoute?.startStop || '',
+      destination: selectedRoute?.endStop || '',
+      vehicleName: driverInfo.vehicleNumber,
       name: driverInfo.driverName
     };
     
@@ -86,6 +134,12 @@ const DriverLogin = () => {
       <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '2px', zIndex: 100 }}>
         Transit Tracker
       </div>
+      <button 
+        onClick={() => navigate('/')}
+        className="home-button"
+      >
+        Home
+      </button>
       <h1 style={{ marginTop: 80 }}>Driver Login</h1>
       
       {!isAuthenticated ? (
@@ -156,53 +210,20 @@ const DriverLogin = () => {
             </div>
             
             {routeData.city && (
-              <>
-                <div className="form-group">
-                  <label htmlFor="startingPoint">Starting Point:</label>
-                  <select
-                    id="startingPoint"
-                    name="startingPoint"
-                    value={routeData.startingPoint}
-                    onChange={handleRouteChange}
-                    required
-                  >
-                    <option value="">Select Source Stop</option>
-                    {cityStops[routeData.city].map(stop => (
-                      <option key={stop} value={stop}>{stop}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="destination">Destination:</label>
-                  <select
-                    id="destination"
-                    name="destination"
-                    value={routeData.destination}
-                    onChange={handleRouteChange}
-                    required
-                  >
-                    <option value="">Select Destination Stop</option>
-                    {cityStops[routeData.city].map(stop => (
-                      <option key={stop} value={stop}>{stop}</option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            )}
-            
-            {routeData.city && (
               <div className="form-group">
-                <label htmlFor="route">Route:</label>
+                <label htmlFor="routeId">Route:</label>
                 <select
-                  id="route"
-                  name="route"
-                  value={routeData.route}
+                  id="routeId"
+                  name="routeId"
+                  value={routeData.routeId}
                   onChange={handleRouteChange}
                   required
                 >
                   <option value="">Select Route</option>
-                  {cityRoutes[routeData.city]?.map(route => (
-                    <option key={route} value={route}>{route}</option>
+                  {routes?.map(route => (
+                    <option key={route.routeId} value={route.routeId}>
+                      {route.routeName} - {route.startStop} to {route.endStop}
+                    </option>
                   ))}
                 </select>
               </div>

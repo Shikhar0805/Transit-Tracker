@@ -27,7 +27,6 @@ const DriverTracking = () => {
   const navigate = useNavigate();
   const [position, setPosition] = useState(null);
   const [driverInfo, setDriverInfo] = useState(null);
-  const [isTracking, setIsTracking] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -62,7 +61,7 @@ const DriverTracking = () => {
   useEffect(() => {
     let watchId;
 
-    if (isTracking && navigator.geolocation) {
+    if (navigator.geolocation && driverInfo?.vehicleName) {
       watchId = navigator.geolocation.watchPosition(
         (position) => {
           const newPosition = [
@@ -71,13 +70,17 @@ const DriverTracking = () => {
           ];
           setPosition(newPosition);
           
-          // Send driver location to Firebase
-          const locationData = {
-            ...driverInfo,
-            position: newPosition,
-            timestamp: new Date().toISOString()
-          };
-          set(ref(db, `buses/${driverInfo.vehicleName}`), locationData);
+          // Send driver location to Firebase (automatically while logged in)
+          // Double-check that driverInfo still exists (user hasn't logged out)
+          const currentDriverInfo = localStorage.getItem('driverInfo');
+          if (currentDriverInfo) {
+            const locationData = {
+              ...driverInfo,
+              position: newPosition,
+              timestamp: new Date().toISOString()
+            };
+            set(ref(db, `buses/${driverInfo.vehicleName}`), locationData);
+          }
         },
         (err) => {
           setError(`Error: ${err.message}`);
@@ -91,20 +94,27 @@ const DriverTracking = () => {
         navigator.geolocation.clearWatch(watchId);
       }
     };
-  }, [isTracking, driverInfo]);
-
-  const toggleTracking = () => {
-    setIsTracking(!isTracking);
-  };
+  }, [driverInfo]);
 
   const handleLogout = () => {
-    setIsTracking(false);
-    localStorage.removeItem('driverInfo');
-    // Remove bus from Firebase when logging out
+    // Remove bus from Firebase first
     if (driverInfo?.vehicleName) {
-      remove(ref(db, `buses/${driverInfo.vehicleName}`));
+      remove(ref(db, `buses/${driverInfo.vehicleName}`))
+        .then(() => {
+          // Only after successful removal, clear localStorage and navigate
+          localStorage.removeItem('driverInfo');
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error('Error removing bus from Firebase:', error);
+          // Even if removal fails, clear and navigate
+          localStorage.removeItem('driverInfo');
+          navigate('/');
+        });
+    } else {
+      localStorage.removeItem('driverInfo');
+      navigate('/');
     }
-    navigate('/');
   };
 
   if (error) {
@@ -128,10 +138,7 @@ const DriverTracking = () => {
 
   return (
     <div className="driver-tracking-container">
-      <div style={{ position: 'absolute', top: 20, left: 30, fontWeight: 'bold', fontSize: '2rem', color: '#1976d2', letterSpacing: '2px', zIndex: 100 }}>
-        Transit Tracker
-      </div>
-      <div className="driver-info-panel" style={{ marginTop: 80 }}>
+      <div className="driver-info-panel">
         <h1>Driver Tracking</h1>
         <div className="driver-details">
           <p><strong>Driver:</strong> {driverInfo.name || driverInfo.driverName}</p>
@@ -139,15 +146,8 @@ const DriverTracking = () => {
           <p><strong>Route:</strong> {driverInfo.route}</p>
           <p><strong>From:</strong> {driverInfo.startingPoint}</p>
           <p><strong>To:</strong> {driverInfo.destination}</p>
-          <p><strong>Status:</strong> {isTracking ? 'Sharing Location' : 'Not Sharing'}</p>
         </div>
         <div className="action-buttons">
-          <button 
-            className={`tracking-button ${isTracking ? 'stop' : 'start'}`}
-            onClick={toggleTracking}
-          >
-            {isTracking ? 'Stop Sharing Location' : 'Start Sharing Location'}
-          </button>
           <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>
@@ -178,7 +178,6 @@ const DriverTracking = () => {
                 <p><strong>Route:</strong> {driverInfo.route}</p>
                 <p><strong>From:</strong> {driverInfo.startingPoint}</p>
                 <p><strong>To:</strong> {driverInfo.destination}</p>
-                <p><strong>Status:</strong> {isTracking ? 'Live Tracking' : 'Tracking Paused'}</p>
                 <p><strong>Current Location:</strong> [{position[0].toFixed(5)}, {position[1].toFixed(5)}]</p>
               </div>
             </Popup>

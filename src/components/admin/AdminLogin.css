@@ -1,0 +1,161 @@
+.admin-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  text-align: center;
+  background-image: url("../../../Images/Background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 1rem;
+}
+
+.admin-form-container {
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+  border: white 1px solid;
+}
+
+.admin-form-container h1 {
+  color: white !important;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.admin-login-container h1 {
+  color: white !important;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white !important;
+}
+
+.form-group input {
+  padding: 0.8rem;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  color: black;
+  background-color: white;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #764ba2;
+  box-shadow: 0 0 10px rgba(118, 75, 162, 0.3);
+}
+
+.submit-button {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #333;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid #f5c6cb;
+}
+
+.demo-credentials {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.demo-credentials h3 {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.demo-credentials p {
+  color: #333;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.demo-credentials hr {
+  border: none;
+  border-top: 1px solid #667eea;
+  margin: 1rem 0;
+}
+
+.home-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background-color: #764ba2;
+  color: white;
+  border: 1px solid white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+  font-weight: bold;
+}
+
+.home-button:hover {
+  background-color: #5a3d7a;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .admin-form-container {
+    padding: 1.5rem;
+  }
+
+  .admin-form-container h1 {
+    margin-top: 1rem;
+    color: white !important;
+  }
+
+  .demo-credentials {
+    padding: 1rem;
+  }
+
+  .demo-credentials p {
+    font-size: 0.9rem;
+  }
+}
