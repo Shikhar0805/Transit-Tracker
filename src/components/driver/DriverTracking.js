@@ -134,7 +134,8 @@ const DriverTracking = () => {
       <div className="driver-info-panel" style={{ marginTop: 80 }}>
         <h1>Driver Tracking</h1>
         <div className="driver-details">
-          <p><strong>Vehicle:</strong> {driverInfo.vehicleName}</p>
+          <p><strong>Driver:</strong> {driverInfo.name || driverInfo.driverName}</p>
+          <p><strong>Vehicle:</strong> {driverInfo.vehicleName || driverInfo.vehicleNumber}</p>
           <p><strong>Route:</strong> {driverInfo.route}</p>
           <p><strong>From:</strong> {driverInfo.startingPoint}</p>
           <p><strong>To:</strong> {driverInfo.destination}</p>

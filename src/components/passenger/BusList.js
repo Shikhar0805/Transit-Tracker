@@ -68,11 +68,18 @@ const BusList = () => {
     const unsubscribe = onValue(busesRef, (snapshot) => {
       const busesData = snapshot.val() || {};
       const busList = Object.values(busesData).filter(bus => {
-          // Now both are selected from dropdowns, so use exact match
-          return (
+          // Match by starting point and destination
+          const routeMatch = (
             bus.startingPoint === passengerRoute?.startingPoint &&
             bus.destination === passengerRoute?.destination
           );
+          
+          // If preferred route is specified, also match by route
+          if (passengerRoute?.preferredRoute && passengerRoute.preferredRoute !== '') {
+            return routeMatch && bus.route === passengerRoute.preferredRoute;
+          }
+          
+          return routeMatch;
       });
       // Calculate ETA for each bus
       if (passengerPosition) {
@@ -127,6 +134,9 @@ const BusList = () => {
         <div className="route-details">
           <p><strong>From:</strong> {passengerRoute.startingPoint}</p>
           <p><strong>To:</strong> {passengerRoute.destination}</p>
+          {passengerRoute.preferredRoute && (
+            <p><strong>Preferred Route:</strong> {passengerRoute.preferredRoute}</p>
+          )}
         </div>
         
         <div className="bus-list">

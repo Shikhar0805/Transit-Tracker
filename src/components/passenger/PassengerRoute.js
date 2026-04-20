@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { cityStops } from '../../data/cityStops';
+import { cityStops, cityRoutes } from '../../data/cityStops';
 import { useNavigate } from 'react-router-dom';
 import './PassengerRoute.css';
 
@@ -8,7 +8,8 @@ const PassengerRoute = () => {
   const [routeData, setRouteData] = useState({
     city: '',
     startingPoint: '',
-    destination: ''
+    destination: '',
+    preferredRoute: ''
   });
 
   const handleChange = (e) => {
@@ -17,9 +18,9 @@ const PassengerRoute = () => {
       ...routeData,
       [name]: value
     });
-    // Reset stops if city changes
+    // Reset stops and route if city changes
     if (name === 'city') {
-      setRouteData({ city: value, startingPoint: '', destination: '' });
+      setRouteData({ city: value, startingPoint: '', destination: '', preferredRoute: '' });
     }
   };
 
@@ -82,6 +83,20 @@ const PassengerRoute = () => {
                   <option value="">Select Destination Stop</option>
                   {cityStops[routeData.city].map(stop => (
                     <option key={stop} value={stop}>{stop}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="preferredRoute">Preferred Route (Optional):</label>
+                <select
+                  id="preferredRoute"
+                  name="preferredRoute"
+                  value={routeData.preferredRoute}
+                  onChange={handleChange}
+                >
+                  <option value="">Any Route</option>
+                  {cityRoutes[routeData.city]?.map(route => (
+                    <option key={route} value={route}>{route}</option>
                   ))}
                 </select>
               </div>
