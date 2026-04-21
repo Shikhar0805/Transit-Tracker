@@ -17,5 +17,5 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 
 reportWebVitals();
-// Register service worker for PWA support
-serviceWorkerRegistration.register();
+// Register service worker for PWA support (DISABLED - causing cache issues)
+// serviceWorkerRegistration.register();

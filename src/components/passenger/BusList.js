@@ -415,7 +415,7 @@ const BusList = () => {
         if (prevPosition) {
           const updatedBusList = busList.map(bus => {
             const estimatedArrivalMinutes = calculateEstimatedArrival(bus.position, prevPosition);
-            const estimatedArrival = new Date(Date.now() + estimatedArrivalMinutes * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const estimatedArrival = new Date(Date.now() + estimatedArrivalMinutes * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
             return {
               ...bus,
               estimatedArrival,
@@ -436,6 +436,22 @@ const BusList = () => {
       unsubscribe();
     };
   }, [passengerRoute, getRouteDetails, stopNamesMatch]);
+
+  // Update ETA whenever passenger position changes or buses are updated
+  useEffect(() => {
+    if (buses.length > 0 && passengerPosition) {
+      const updatedBusList = buses.map(bus => {
+        const estimatedArrivalMinutes = calculateEstimatedArrival(bus.position, passengerPosition);
+        const estimatedArrival = new Date(Date.now() + estimatedArrivalMinutes * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        return {
+          ...bus,
+          estimatedArrival,
+          estimatedArrivalMinutes
+        };
+      });
+      setBuses(updatedBusList);
+    }
+  }, [passengerPosition]);
 
   const handleBusSelect = (bus) => {
     setSelectedBus(bus);

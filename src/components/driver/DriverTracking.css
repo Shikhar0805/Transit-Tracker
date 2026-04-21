@@ -27,6 +27,41 @@
 .driver-details p {
   margin: 0;
   flex: 1 1 200px;
+  font-size: 0.95rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .driver-info-panel h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .driver-details {
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .driver-details p {
+    flex: 1 1 150px;
+    font-size: 0.85rem;
+  }
+  
+  .action-buttons {
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+  
+  .logout-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .driver-info-panel h1 {
+    font-size: 1.6rem;
+  }
 }
 
 .action-buttons {
@@ -102,5 +137,22 @@
   
   .map-container {
     flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .driver-tracking-container {
+    flex-direction: column;
+  }
+  
+  .driver-info-panel {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  
+  .map-container {
+    height: 60vh;
   }
 }
